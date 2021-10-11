@@ -4,6 +4,7 @@
         <button type="button" @click.prevent="onAll()" class="btn"  v-bind:class="{btn_active: allList}">All</button>
          <ul class="users_list">
                 <li  v-for="user of users" :key="user._id" class="users_list_item">
+                    <a href="" class="users_list_link" @click.prevent="onActiveChat(user)">
                     <div class="user"> 
                         <img :src="user.avatar" alt="user" width="70" height="70" /> 
                         <span v-bind:class="{user_status_online: user.online}" class="user_status"></span>
@@ -12,6 +13,7 @@
                         <h3 class="userPreview_title">{{user.name}}</h3>
                         <p class="userPreview_decription">{{user.description}}</p>
                     </div>
+                    </a>
                 </li>
         </ul>
     </section>
@@ -19,26 +21,13 @@
 
 <script>
     export default{
-        // async fetch({store}){
-        //     if(store.getters['users/users'].length === 0){
-        //       const users = await store.dispatch('users/fetchUsers')
-        //       console.log(users)
-        //     }
-        // },
-        // data:{
-        //     users:[]
-        // }
-        // computed:{
-        //     users(){
-        //         return this.$store.getters['users/users']
-        //     }
-        // }
+       
         data: () => ({
-        allUsers:[],
-        filteredUsers:[],
-        users: [],
-        onlineList: false,
-        allList: true,
+            allUsers:[],
+            filteredUsers:[],
+            users: [],
+            onlineList: false,
+            allList: true,
         }),
 
         async mounted(){
@@ -59,6 +48,12 @@
                 this.users= this.allUsers;
                 this.allList = true;
                 this.onlineList=false;
+            },
+
+            onActiveChat(user){
+                // const user = {id, name, description, avatar}
+                // console.log(user)
+                localStorage.setItem('activeUser', JSON.stringify(user))
             }
         }
     }
@@ -81,12 +76,21 @@
 
         &_item{
             padding:0;
+            margin-bottom: 10px;
+        }
+
+        &_link{
             display: flex;
             justify-content: space-evenly;
             align-items:center;
-            // margin-left: 15px;
-            margin-bottom: 10px;
-            // padding-right: 10px;
+            margin:0;
+            padding:0;
+            text-decoration:none;
+            background-color:white;
+
+            // &_active{
+            //     background-color: #d7dfe7;
+            // }
         }
     }
 }
@@ -115,6 +119,7 @@
         margin:0;
         padding:0;
         font-size:17px;
+        color: black;
     };
 
     &_decription{
@@ -139,3 +144,20 @@
     }
 }
 </style>
+
+
+// STORE
+ // async fetch({store}){
+        //     if(store.getters['users/users'].length === 0){
+        //       const users = await store.dispatch('users/fetchUsers')
+        //       console.log(users)
+        //     }
+        // },
+        // data:{
+        //     users:[]
+        // }
+        // computed:{
+        //     users(){
+        //         return this.$store.getters['users/users']
+        //     }
+        // }

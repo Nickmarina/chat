@@ -11,11 +11,11 @@ export const mutations = {
 export const actions ={
     async fetchUsers({commit}){
         const users =  await this.$axios.$get(`/api/users`);
-        console.log(users)
+        console.log( `USERSSSSSSS: ${users}`)
         commit('setUsers', users);
-    }
+    },
 }
 
 export const getters ={
-    users: state => state.users,
+    getUsers: state => state.users,
 }

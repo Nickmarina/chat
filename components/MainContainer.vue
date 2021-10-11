@@ -19,6 +19,7 @@ html{
   margin: auto;
   width: 1200px;
   height: 570px;
-  background-color: #becbd9;
+  background-color: #d7dfe7;
+ 
 }
 </style>
