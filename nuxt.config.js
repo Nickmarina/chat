@@ -4,9 +4,9 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'chat-frontend',
+    title: 'chat',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'en',
     },
     meta: [
       { charset: 'utf-8' },
@@ -24,6 +24,8 @@ export default {
     
   ],
 
+  loading:{color:'white'},
+
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
   ],
@@ -37,11 +39,22 @@ export default {
     '@nuxt/typescript-build',
   ],
 
+
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/axios',
   ],
 
+  axios: {
+    proxy: true,
+  },
+  
+  proxy: {
+    '/api/': { target: 'http://localhost:5000/', pathRewrite: {'^/api/': ''}, changeOrigin: true }
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-  }
+  }, 
+
+  
 }

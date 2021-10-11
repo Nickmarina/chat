@@ -1,5 +1,5 @@
 <template>
-  <Container/>
+  <MainContainer/>
 </template>
 
 <script lang="ts">
