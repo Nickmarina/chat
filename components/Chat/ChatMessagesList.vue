@@ -1,28 +1,44 @@
 <template>
 <!-- <ul  class="chatList"></ul> -->
     <ul class="chatList">
-                <li class="msg" v-for="message of messages" :key="message._id">
-                    <div class="msg_info">
-                         <h3 class="msg_infoName">Name</h3>
-                        <span class="msg_infoTime">{{new Date().toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' })}}</span>
+                <li class="msg" v-for="message of messages" :key="message._id"  v-bind:class="{msg_sendMessage: sendMessage}">
+                    <div v-bind:class="{msg_info_sendMessage: sendMessage}" class="msg_info">
+                         <h3 class="msg_infoName">{{message.sender_name}}</h3>
+                        <span class="msg_infoTime">{{message.date}}</span>
                     </div>
                    
-                    <p class="msg_text"> {{message.message}} 😄</p>
+                    <p class="msg_text"> {{message.message}} </p>
                 </li>
     </ul>
 </template>
 
 <script >
-export default {
-    data: () => ({
-        messages: []
+export default ({
+    data:()=>({
+        name: "",
+        sendMessage: false,
+        changedMessages:[]
     }),
-    async mounted(){
-        this.messages = await this.$axios.$get(`/api/messages?id=bot`)  
-        console.dir(this.messages)
+    props:{
+        messages:{
+            type: Array,
+            required: true,
+        },
+        currentUser:{
+            type: Object,
+        }
     },
-    props:['todos']
-}
+   async mounted() {
+       return await this.messages.map(message =>{
+            if(message.sender_id === this.currentUser._id){
+                this.sendMessage = true;
+            }else{this.sendMessage = false;}            
+        })
+    },
+
+
+})
+
 </script>
 
 <style lang="scss" scoped>
@@ -45,8 +61,9 @@ export default {
     border-radius: 15px;
     border-bottom-left-radius: 0;
         &_sendMessage{
-          border-bottom-left-radius: 15%;  
-            flex-direction: row-reverse;
+            
+            border-bottom-left-radius: 15px;  
+            margin-left:auto;
             border-bottom-right-radius: 0;
         }
 
@@ -80,8 +97,6 @@ export default {
             margin:0;
             padding: 10px;
         }
-
-// для відправлених повідомлень
 
 }
 

@@ -21,20 +21,31 @@
 
 <script>
     export default{
-       
         data: () => ({
             allUsers:[],
             filteredUsers:[],
             users: [],
             onlineList: false,
             allList: true,
+            connectedUser:{},
+            currentUser:{}
         }),
 
-        async mounted(){
-            this.allUsers = await this.$axios.$get(`/api/users`); 
-            this.users = this.allUsers;
-            this.allList = true;
-            this.onlineList=false;
+  
+       async mounted(){
+           this.allUsers = await this.$axios.$get(`/api/users`); 
+           this.users = this.allUsers.filter(user =>{
+                if(localStorage.getItem('currentUser')){
+                    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                    return user._id !== this.currentUser._id
+                } else{
+                    return user;
+                }
+            })
+
+            this.connectedUser = this.users[Math.floor(Math.random() * this.users.length)]
+            localStorage.setItem('connectedUser', JSON.stringify(this.connectedUser))
+            
         },
 
         methods:{
@@ -51,9 +62,7 @@
             },
 
             onActiveChat(user){
-                // const user = {id, name, description, avatar}
-                // console.log(user)
-                localStorage.setItem('activeUser', JSON.stringify(user))
+                localStorage.setItem('connectedUser', JSON.stringify(user))
             }
         }
     }
@@ -144,20 +153,3 @@
     }
 }
 </style>
-
-
-// STORE
- // async fetch({store}){
-        //     if(store.getters['users/users'].length === 0){
-        //       const users = await store.dispatch('users/fetchUsers')
-        //       console.log(users)
-        //     }
-        // },
-        // data:{
-        //     users:[]
-        // }
-        // computed:{
-        //     users(){
-        //         return this.$store.getters['users/users']
-        //     }
-        // }
