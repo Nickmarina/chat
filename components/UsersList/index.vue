@@ -3,8 +3,8 @@
         <button type="button" @click.prevent="onOnline()" class="btn" v-bind:class="{btn_active: onlineList}">Online</button>
         <button type="button" @click.prevent="onAll()" class="btn"  v-bind:class="{btn_active: allList}">All</button>
          <ul class="users_list">
-                <li  v-for="user of users" :key="user._id" class="users_list_item">
-                    <a href="" class="users_list_link" @click.prevent="onActiveChat(user)">
+                <li  v-for="user of users" :key="user._id" class="users_list_item" >
+                    <a href="" class="users_list_link" @click.prevent="onActiveChat(user)" v-bind:class="{users_list_activeLink :activeUser}">
                     <div class="user"> 
                         <img :src="user.avatar" alt="user" width="70" height="70" /> 
                         <span v-bind:class="{user_status_online: user.online}" class="user_status"></span>
@@ -22,48 +22,36 @@
 <script>
     export default{
         data: () => ({
-            allUsers:[],
             filteredUsers:[],
             users: [],
             onlineList: false,
             allList: true,
-            connectedUser:{},
-            currentUser:{}
+            activeUser: false,
         }),
 
-  
        async mounted(){
-           this.allUsers = await this.$axios.$get(`/api/users`); 
-           this.users = this.allUsers.filter(user =>{
-                if(localStorage.getItem('currentUser')){
-                    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                    return user._id !== this.currentUser._id
-                } else{
-                    return user;
-                }
-            })
-
-            this.connectedUser = this.users[Math.floor(Math.random() * this.users.length)]
-            localStorage.setItem('connectedUser', JSON.stringify(this.connectedUser))
-            
+            await this.$store.dispatch('getUsers');
+            this.users = await this.$store.getters.users;
         },
 
         methods:{
             onOnline(){
-               this.filteredUsers = this.allUsers.filter(user => user.online === true);
+               this.filteredUsers = this.$store.getters.users.filter(user => user.online === true);
                this.users = this.filteredUsers;
                this.onlineList = true;
                this.allList = false;
             },
             onAll(){
-                this.users= this.allUsers;
+                this.users= this.$store.getters.users;
                 this.allList = true;
                 this.onlineList=false;
             },
 
-            onActiveChat(user){
-                localStorage.setItem('connectedUser', JSON.stringify(user))
-            }
+            async onActiveChat(user){
+                await this.$store.dispatch('getConnectedUser', user);
+                await this.$store.dispatch('getMessages', JSON.parse(localStorage.getItem('currentUser')));
+            },
+
         }
     }
 </script>
@@ -96,10 +84,10 @@
             padding:0;
             text-decoration:none;
             background-color:white;
+        }
 
-            // &_active{
-            //     background-color: #d7dfe7;
-            // }
+        &_activeLink{
+                background-color: #d7dfe7;
         }
     }
 }

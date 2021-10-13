@@ -5,36 +5,24 @@
   </div>
 </template>
 
+<script>
 
-// <script>
-//   export default({
-//    data:()=>({
-//       users:[],
-//       connectedUser:{},
-//       // currentUser: {},
-//    }),
-//     mounted(){
-//             const users =  this.$axios.$get(`/api/users`); 
-//              if (localStorage.getItem('currentUser')){
-//                this.currentUser = JSON.parse(localStorage.getItem('currentUser')) 
-//             } else{
-//                 const newUser = {name: `user ${Math.floor(Math.random() * 1000)}`}
-//                 this.currentUser =  this.$axios.$post(`/api/users`, newUser)
-//                  localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
-//             }  
-            
-//             if (localStorage.getItem('connectedUser')){
-//                 this.connectedUser = JSON.parse(localStorage.getItem('connectedUser')) 
-//             } else{
-//                 this.connectedUser = this.users[Math.floor(Math.random() * this.users.length)]
-//                 localStorage.setItem('connectedUser', JSON.stringify(this.connectedUser))
-//             } 
+export default ({
 
-//            this.users = users.filter(user=> user._id !== this.currentUser._id)        
-//       },
-//   })
+    async mounted(){
+    if(!localStorage.getItem('currentUser')){
+          const user = {name: `user ${Math.floor(Math.random() * 1000)}`};
+          const currentUser = await this.$axios.$post(`/api/users`, user);
+          localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      }
+      await this.$store.dispatch('getUsers');
+      const randomUser =  this.$store.getters.users[Math.floor(Math.random() * this.$store.getters.users.length)];
+      await this.$store.dispatch('getConnectedUser', randomUser);
+      await this.$store.dispatch('getMessages',JSON.parse(localStorage.getItem('currentUser')))
+    }
+})
+</script>
 
-// </script>
 
 <style>
 html{

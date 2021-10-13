@@ -1,9 +1,9 @@
 <template>
     <section class="chatContainer">
-        <ChatUserDescription v-bind:connectedUser="connectedUser"/>
+        <ChatUserDescription/>
         <div class="chatContainer_messages">
-            <ChatMessagesList v-bind:messages="filteredMessages" v-bind:currentUser="currentUser"/>
-            <ChatMessageForm v-bind:messages="filteredMessages" v-bind:connectedUser="connectedUser" v-bind:currentUser="currentUser"/>
+            <ChatMessagesList />
+            <ChatMessageForm  v-bind:currentUser="currentUser"/>
         </div>
     </section>
 </template>
@@ -11,26 +11,13 @@
 
 <script>
     export default({
-        data: () => ({
-        messages: [],
-        filteredMessages:[],
-        currentUser:{},
-        connectedUser:{}
-    }),
+         props:{
+            currentUser:{
+                type: Object,
+            },
+         },
         async mounted(){
-            if(localStorage.getItem('currentUser')){
-                 this.currentUser= JSON.parse(localStorage.getItem('currentUser')) 
-                 this.messages = await this.$axios.$get(`/api/messages?id=${this.currentUser._id}&botId=bot`) 
-            } else{
-                this.messages = await this.$axios.$get(`/api/messages?id=bot`)
-                const newUser = {name: `user ${Math.floor(Math.random() * 1000)}`}
-                this.currentUser = await this.$axios.$post(`/api/users`, newUser)
-                localStorage.setItem('currentUser', JSON.stringify(this.currentUser))
-            }   
-           this.connectedUser = JSON.parse(localStorage.getItem('connectedUser')) 
-           this.filteredMessages = this.messages.filter(message =>{
-                return  message.sender_id ===this.connectedUser._id || message.recipient_id === this.connectedUser._id 
-            })
+            // await this.$store.dispatch('getMessages')
         },        
     })
 </script>

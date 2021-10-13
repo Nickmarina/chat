@@ -1,7 +1,7 @@
 <template>
 <!-- <ul  class="chatList"></ul> -->
     <ul class="chatList">
-                <li class="msg" v-for="message of messages" :key="message._id"  v-bind:class="{msg_sendMessage: sendMessage}">
+                <li class="msg" v-for="message of this.$store.getters.messages" :key="message._id"  v-bind:class="{msg_sendMessage: sendMessage}">
                     <div v-bind:class="{msg_info_sendMessage: sendMessage}" class="msg_info">
                          <h3 class="msg_infoName">{{message.sender_name}}</h3>
                         <span class="msg_infoTime">{{message.date}}</span>
@@ -9,31 +9,23 @@
                    
                     <p class="msg_text"> {{message.message}} </p>
                 </li>
+                 <!-- <p> {{seenInfo}}</p> -->
     </ul>
 </template>
 
-<script >
+// <script >
 export default ({
     data:()=>({
         name: "",
         sendMessage: false,
-        changedMessages:[]
+        // seenInfo:'',
     }),
-    props:{
-        messages:{
-            type: Array,
-            required: true,
-        },
-        currentUser:{
-            type: Object,
-        }
-    },
    async mounted() {
-       return await this.messages.map(message =>{
-            if(message.sender_id === this.currentUser._id){
-                this.sendMessage = true;
-            }else{this.sendMessage = false;}            
-        })
+    //    return await this.messages.map(message =>{
+    //         if(message.sender_id === this.$store.getters.currentUser._id){
+    //             this.sendMessage = true;
+    //         }else{this.sendMessage = false;}            
+    //     })
     },
 
 
