@@ -25,12 +25,17 @@
 
 <style lang="scss">
     .chatConteiner {
-        width: 900px;
         margin:0;
         padding:0;
+        @media screen and(max-width:1199px) {
+            max-width: 800px;
+        }
+        @media screen and (min-width: 1200px){
+            width: 900px;
+        }
+      
 
         &_mesages{
-            // position:relative;
             margin:0;
             padding: 0;
             background-color: #d7dfe7;

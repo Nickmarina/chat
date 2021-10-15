@@ -50,7 +50,7 @@ export default {
   },
   
   proxy: {
-    '/api/': { target: 'http://localhost:5000/', pathRewrite: {'^/api/': ''}, changeOrigin: true }
+    '/api/': { target: 'https://chat-server-nestjs.herokuapp.com/', pathRewrite: {'^/api/': ''}, changeOrigin: true }
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

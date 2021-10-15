@@ -4,7 +4,7 @@
         <button type="button" @click.prevent="onAll()" class="btn"  v-bind:class="{btn_active: allList}">All</button>
          <ul class="users_list">
                 <li  v-for="user of users" :key="user._id" class="users_list_item" >
-                    <a href="" class="users_list_link" @click.prevent="onActiveChat(user)" v-bind:class="{users_list_activeLink :activeUser}">
+                    <a href="" class="users_list_link" @click.prevent="onActiveChat(user)" v-bind:class="{'users_list_activeLink': user._id===$store.getters.connectedUser._id}">
                     <div class="user"> 
                         <img :src="user.avatar" alt="user" width="70" height="70" /> 
                         <span v-bind:class="{user_status_online: user.online}" class="user_status"></span>
@@ -17,7 +17,6 @@
                 </li>
         </ul>
         <input class="users_search" placeholder="Search..."  v-model="value" /> 
-        <p> {{value}}</p>
     </section>
 </template>
 
@@ -73,13 +72,31 @@
 
 <style scoped lang="scss">
 .users{ 
-position: relative;
-   width: 300px;
-   height: 570px;
+   position: relative;
+   max-width:500px;
    background-color:white;
-   margin-left: auto; 
-
+   @media screen and (max-width: 1199px){
+       margin-left: auto;
+       margin-right: auto;
+       margin-top: 20px;
+       margin-bottom: 20px;
+   }
+   @media screen and (min-width: 1200px){
+        margin-left: auto; 
+        width: 300px;
+        height: 570px;
+   }
+  
    &_search{
+    @media screen and (max-width: 1199px){
+        display: block;
+        width:300px;
+        margin-left: auto;
+        margin-right: auto;
+        padding:10px;
+     }
+
+    @media screen and (min-width: 1200px){
        position:fixed;
        bottom:9%;
        right:9%;
@@ -87,16 +104,21 @@ position: relative;
        padding:5px;
        border: 1px solid lightgray;
        border-radius: 5%;
+    }
    }
 
     &_list{
-        height:470px;
         list-style:none;
         margin:0;
         margin-bottom: 5px;
         padding:0;
         padding-top: 10px;
-        overflow: auto;
+       
+        
+        @media screen and (min-width: 1200px){
+            height:470px;
+            overflow: auto;
+        }
 
         &_item{
             padding:0;
@@ -105,16 +127,16 @@ position: relative;
 
         &_link{
             display: flex;
-            justify-content: space-evenly;
             align-items:center;
             margin:0;
             padding:0;
             text-decoration:none;
             background-color:white;
+            margin-left: 5px;
         }
 
         &_activeLink{
-                background-color: #d7dfe7;
+                background-color: #f8f8f8;
         }
     }
 }
@@ -139,6 +161,7 @@ position: relative;
 }
 
 .userPreview{
+    margin-left: 20px;
     &_title{
         margin:0;
         padding:0;
@@ -155,12 +178,24 @@ position: relative;
 }
 
 .btn{
-    width:148px;
     margin:0;
     padding:15px;
     border: 0.2px solid gray;
-    border-top:none;
-    background-color: #d7dfe7;
+    
+    @media screen and (max-width: 1199px){
+        display: block;
+        min-width:300px;
+        max-width:500px;
+        margin-left: auto;
+        margin-right:auto;
+        margin-bottom:15px;
+    }
+
+    @media screen and (min-width: 1200px){
+        width:148px;
+        border-top:none;
+        background-color: #d7dfe7;
+    }
 
     &_active{
         border: none;

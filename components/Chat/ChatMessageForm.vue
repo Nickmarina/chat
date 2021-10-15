@@ -16,7 +16,11 @@ export default {
         currentUser:{},
         inervalId : '',
     }),
-
+    watch:{
+        value(){
+            this.value.length<2 && this.value[0]===" "? this.value='' :this.value
+        }
+    },
     methods:{
         async onSubmit(){
             this.text= this.value
@@ -30,10 +34,8 @@ export default {
                 date: new Date().toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' })
             }
 
-            // console.log(userMessage)
             await this.$axios.$post(`/api/messages`, userMessage)
             await this.$store.dispatch('getMessages', this.currentUser)
-            // this.messages.push(userSendedMessage)
 
             if(this.$store.getters.connectedUser.name ==='Echo bot'){
                 this.typing = `${this.$store.getters.connectedUser.name} is typing...`
@@ -92,8 +94,12 @@ export default {
             margin: 0;
             padding:0;
             padding-left: 5px;
-            width: 700px;
+            width:300px;         
             border: 1px solid #428bca;
+
+             @media screen and (min-width: 1200px){
+                   width: 700px;
+             }
         }
 
         &_btn{
