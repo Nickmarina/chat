@@ -8,8 +8,11 @@
                     </div>
                    
                     <p class="msg_text"> {{message.message}} </p>
+                    <p class="seenInfo_active" > Seen {{message.date}}</p>
+                    <!-- <p class="seenInfo" v-bind:class="{seenInfo_active: onSended(message)}"> Seen {{message.date}}</p> -->
+                
                 </li>
-                 <!-- <p> {{seenInfo}}</p> -->
+                
     </ul>
 </template>
 
@@ -18,15 +21,18 @@ export default ({
     data:()=>({
         name: "",
         sendMessage: false,
-        // seenInfo:'',
+        seenInfo:Date.now(),
+        currentUser: {},
     }),
-   async mounted() {
-    //    return await this.messages.map(message =>{
-    //         if(message.sender_id === this.$store.getters.currentUser._id){
-    //             this.sendMessage = true;
-    //         }else{this.sendMessage = false;}            
-    //     })
+    async mounted() {
+        this.currentUser = await JSON.parse(localStorage.getItem('CurrentUser'))
     },
+    methods:{
+        // onSended(message){
+        //    message.sender_id === this.currentUser.sender_id ?true :false
+        // }
+    }
+
 
 
 })
@@ -45,15 +51,17 @@ export default ({
         }
 
     .msg {
+    position:relative;
     background-color: #f4f8fb;
     max-width: 650px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     margin-left:10px;
     margin-right:10px;
     border-radius: 15px;
     border-bottom-left-radius: 0;
+    box-shadow: 1px 1px 5px 1px rgba(0,0,0,0.47);
+  
         &_sendMessage{
-            
             border-bottom-left-radius: 15px;  
             margin-left:auto;
             border-bottom-right-radius: 0;
@@ -90,6 +98,19 @@ export default ({
             padding: 10px;
         }
 
+}
+.seenInfo{
+display:none;
+    &_active{
+    display:inline;
+    color: gray;
+    position: relative;
+    bottom: -17px;
+    left:10px;
+    margin:0;
+    padding:0;
+    font-size:13px;
+    }
 }
 
 </style>    

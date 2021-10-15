@@ -16,6 +16,8 @@
                     </a>
                 </li>
         </ul>
+        <input class="users_search" placeholder="Search..."  v-model="value" /> 
+        <p> {{value}}</p>
     </section>
 </template>
 
@@ -27,11 +29,22 @@
             onlineList: false,
             allList: true,
             activeUser: false,
+            value:'',
         }),
 
        async mounted(){
             await this.$store.dispatch('getUsers');
             this.users = await this.$store.getters.users;
+        },
+
+        watch:{
+            value(){
+                if (this.value.length>0){
+                    const normalizedName = this.value.toLowerCase();
+                    return this.users = this.users.filter(user => user.name.toLowerCase().includes(normalizedName))
+                }
+                this.allList? this.onAll() :this.onOnline();               
+            }
         },
 
         methods:{
@@ -40,11 +53,13 @@
                this.users = this.filteredUsers;
                this.onlineList = true;
                this.allList = false;
+               this.value='';
             },
             onAll(){
                 this.users= this.$store.getters.users;
                 this.allList = true;
                 this.onlineList=false;
+                this.value='';
             },
 
             async onActiveChat(user){
@@ -58,15 +73,27 @@
 
 <style scoped lang="scss">
 .users{ 
+position: relative;
    width: 300px;
    height: 570px;
    background-color:white;
    margin-left: auto; 
 
+   &_search{
+       position:fixed;
+       bottom:9%;
+       right:9%;
+       width: 210px;
+       padding:5px;
+       border: 1px solid lightgray;
+       border-radius: 5%;
+   }
+
     &_list{
-        height:510px;
+        height:470px;
         list-style:none;
         margin:0;
+        margin-bottom: 5px;
         padding:0;
         padding-top: 10px;
         overflow: auto;

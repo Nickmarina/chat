@@ -1,8 +1,8 @@
 <template>
-        <form class="messageForm">
+        <form class="messageForm" @submit.prevent="onSubmit()">
                 <p class="messageForm_typing">{{typing}}</p>
-                <input class="messageForm_input" placeholder="Start chatting!" required v-model=value />
-                <button class="messageForm_btn" type="submit" @click.prevent="onSubmit()">Send a message</button>
+                <input class="messageForm_input" placeholder="Start chatting!" v-model=value required/>
+                <button class="messageForm_btn" type="submit">Send a message</button>
         </form>
 </template>
 
@@ -13,7 +13,8 @@ export default {
         value: '',
         text: '',
         typing:'',
-        currentUser:{}
+        currentUser:{},
+        inervalId : '',
     }),
 
     methods:{
@@ -36,28 +37,30 @@ export default {
 
             if(this.$store.getters.connectedUser.name ==='Echo bot'){
                 this.typing = `${this.$store.getters.connectedUser.name} is typing...`
-                this.bot();         
+                this.bot(this.$store.getters.connectedUser);         
             }
             if(this.$store.getters.connectedUser.name ==='Reverse bot'){
-                this.typing = `${this.$store.getters.connectedUser.name} is typing...`
-                this.text = this.text.split('').reverse().join(''),
-                setTimeout(()=>this.bot(),3000)              
+                const user = this.$store.getters.connectedUser
+                this.typing = `${user.name} is typing...`
+                this.text = this.text.split('').reverse().join('')
+                setTimeout(()=>this.bot(user),3000)              
             }
 
             if(this.$store.getters.connectedUser.name ==='Spam bot'){
-                this.typing = `${this.$store.getters.connectedUser.name} is typing...`
+                // this.typing = `${this.$store.getters.connectedUser.name} is typing...`
+                const user = this.$store.getters.connectedUser.name
                 this.text ="Yep, I did it 😄"
                 const time = Math.floor(Math.random()*(120000-10000)+10000)
-                setInterval(()=> this.bot(), time)
+                setInterval(()=> this.bot(user), time)
             }
         },
 
-        async bot(){
+        async bot(sender){
              const botMessage ={
-                    sender_id: await this.$store.getters.connectedUser._id,
-                    recipient_id: await this.currentUser._id,
+                    sender_id: sender._id,
+                    recipient_id:this.currentUser._id,
                     message: this.text,
-                    sender_name:await this.$store.getters.connectedUser.name,
+                    sender_name:sender.name,
                     date: new Date().toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' })
                 }
                 await this.$axios.$post(`/api/messages`, botMessage)

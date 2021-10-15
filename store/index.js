@@ -1,8 +1,7 @@
 export const state = () =>({
     users:[],
     connectedUser:{},
-    // currentUser:{},
-    messages:{},
+    messages:[],
 });
 
 export const mutations = {
@@ -13,10 +12,6 @@ export const mutations = {
     setConnectedUser(state, connectedUser){
         state.connectedUser = connectedUser;
     },
-
-    // setCurrentUser(state, currentUser){
-    //     state.curentUser = currentUser;
-    // },
 
     setMessages(state, messages){
         state.messages = messages;
@@ -43,19 +38,6 @@ export const actions ={
         commit('setConnectedUser', connectedUser)
     },
 
-    // async getCurrentUser({commit}){
-    //     let currentUser;
-    //     if(localStorage.getItem('currentUser')){
-    //        const user = JSON.parse(localStorage.getItem('currentUser'));
-    //        currentUser = await this.$axios.$get( `/api/users/${user._id}`);
-    //     }else{
-    //         const user = {name: `user ${Math.floor(Math.random() * 1000)}`};
-    //         currentUser = await this.$axios.$post(`/api/users`, user);
-    //         localStorage.setItem('currentUser', JSON.stringify(currentUser));
-    //     }
-    //     commit('setCurrentUser', currentUser)
-    // },
-
     async getMessages({commit, state},currentUser){
         const allMessages =  await this.$axios.$get(`/api/messages?id=${currentUser._id}&botId=bot`)
         const filteredMessages = await allMessages.filter(message =>
@@ -68,6 +50,5 @@ export const actions ={
 export const getters ={
     users: state => state.users,
     connectedUser: state => state.connectedUser,
-    // currentUser: state => state.currentUser,
     messages: state => state.messages,
 }
