@@ -11,7 +11,7 @@ export interface User{
 }
 
 export interface Message{
-    _id:string,
+    _id?:string,
     recipient_id: string,
     sender_id: string,
     message:string,
@@ -24,7 +24,7 @@ export interface Message{
 export interface MainState {
     users: User[],
     connectedUser: User,
-    messages: Message[]
+    messages: Message[],
   }
 
 
@@ -51,7 +51,7 @@ export const mutations: MutationTree<MainState> = {
 
     setMessages(state, messages:Message[]){
         state.messages = messages;
-    }
+    },
 };
 
 export const actions:  ActionTree<MainState, MainState> ={
@@ -71,7 +71,8 @@ export const actions:  ActionTree<MainState, MainState> ={
                     message.sender_id === state.connectedUser._id || message.recipient_id === state.connectedUser._id 
         )
         commit('setMessages', filteredMessages)
-    }
+    },
+
 }
 
 export const getters: GetterTree<MainState, MainState> ={

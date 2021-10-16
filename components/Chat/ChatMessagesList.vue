@@ -1,5 +1,4 @@
 <template>
-<!-- <ul  class="chatList"></ul> -->
     <ul class="chatList">
                 <li class="msg" v-for="message of this.$store.getters.messages" :key="message._id"  v-bind:class="{'msg_sendMessage': message.recipient_id===$store.getters.connectedUser._id}">
                     <div class="msg_info" v-bind:class="{'msg_info_sendMessage': message.recipient_id===$store.getters.connectedUser._id}">

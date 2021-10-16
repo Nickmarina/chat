@@ -8,7 +8,7 @@
 <script>
 
 export default ({
-
+    
     async mounted(){
     if(!localStorage.getItem('currentUser')){
           const user = {name: `user ${Math.floor(Math.random() * 1000)}`};
@@ -22,6 +22,23 @@ export default ({
     }
 })
 </script>
+
+    // async fetch ({ store }){
+    //       const localStorageUser: string|null = localStorage.getItem('currentUser');
+    //   if(typeof localStorageUser === null){
+    //       const user:NewUserName = {name: `user ${Math.floor(Math.random() * 1000)}`};
+    //       await store.dispatch.getCurrentUser('user');
+    //       const currentUser:User = store.getters.currentUser;
+    //       localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    //   }
+    //   await store.dispatch('getUsers');
+    //   const randomUser:User =  store.getters.users[Math.floor(Math.random() * store.getters.users.length)];
+    //   await store.dispatch('getConnectedUser', randomUser);  
+    //   if(typeof localStorageUser === 'string'){
+    //       const currentUser:User = JSON.parse(localStorageUser)
+    //     await store.dispatch('getMessages',currentUser)
+    //   }
+    //  }
 
 
 <style lang='scss'>
