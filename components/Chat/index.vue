@@ -3,25 +3,10 @@
         <ChatUserDescription/>
         <div class="chatContainer_messages">
             <ChatMessagesList />
-            <ChatMessageForm  v-bind:currentUser="currentUser"/>
+            <ChatMessageForm/>
         </div>
     </section>
 </template>
-
-
-<script>
-    export default({
-         props:{
-            currentUser:{
-                type: Object,
-            },
-         },
-        async mounted(){
-            // await this.$store.dispatch('getMessages')
-        },        
-    })
-</script>
-
 
 <style lang="scss">
     .chatConteiner {

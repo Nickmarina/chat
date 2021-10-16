@@ -6,9 +6,7 @@
 </template>
 
 <script>
-
-export default ({
-
+export default ({  
     async mounted(){
     if(!localStorage.getItem('currentUser')){
           const user = {name: `user ${Math.floor(Math.random() * 1000)}`};
@@ -22,7 +20,6 @@ export default ({
     }
 })
 </script>
-
 
 <style lang='scss'>
 html{

@@ -6,27 +6,31 @@
         </form>
 </template>
 
-<script>
+<script lang="ts">
+import {Message,User} from '~/store'
 
 export default {
     data:()=>({
         value: '',
         text: '',
         typing:'',
-        currentUser:{},
-        inervalId : '',
+        currentUser:{_id:'', name:''},
     }),
     watch:{
         value(){
             this.value.length<2 && this.value[0]===" "? this.value='' :this.value
         }
     },
+
     methods:{
         async onSubmit(){
+            const user: string|null = localStorage.getItem('currentUser')
+                if(typeof user === 'string'){
+                    this.currentUser= await JSON.parse(user)
+            }    
             this.text= this.value
             this.value=''
-            this.currentUser = await JSON.parse(localStorage.getItem('currentUser'))
-            const userMessage = {
+            const userMessage: Message= {
                 sender_id:  this.currentUser._id,
                 recipient_id:  this.$store.getters.connectedUser._id,
                 message: this.text,
@@ -54,10 +58,10 @@ export default {
             }
         },
 
-        async bot(sender){
-             const botMessage ={
+        async bot(sender:User){
+             const botMessage:Message ={
                     sender_id: sender._id,
-                    recipient_id:this.currentUser._id,
+                    recipient_id: this.currentUser._id,
                     message: this.text,
                     sender_name:sender.name,
                     date: new Date().toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' })

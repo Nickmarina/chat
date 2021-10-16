@@ -20,20 +20,36 @@
     </section>
 </template>
 
-<script>
+<script lang="ts">
+    import{User} from '~/store'
+
     export default{
         data: () => ({
-            filteredUsers:[],
-            users: [],
+            allUsers:[{_id:'',name:'', online:false}],
+            filteredUsers:[{_id:'', name:'', online:false}],
+            users: [{_id:'', name:'', online:false}],
             onlineList: false,
             allList: true,
             activeUser: false,
             value:'',
+            currentUser:{_id:''}
         }),
 
        async mounted(){
+            const currentUser: string| null = localStorage.getItem('currentUser')
             await this.$store.dispatch('getUsers');
-            this.users = await this.$store.getters.users;
+            const notFilteredUsers:Array<User>= await this.$store.getters.users
+            if(notFilteredUsers.length>0){
+                this.allUsers =notFilteredUsers.filter(user =>{
+                    if(typeof currentUser === 'string'){
+                        this.currentUser= JSON.parse(currentUser);
+                        return user._id !== this.currentUser._id
+                    } else{
+                        return user;
+                    }
+                });
+                this.users = this.allUsers
+            }
         },
 
         watch:{
@@ -48,22 +64,22 @@
 
         methods:{
             onOnline(){
-               this.filteredUsers = this.$store.getters.users.filter(user => user.online === true);
+               this.filteredUsers = this.allUsers.filter(user => user.online === true);
                this.users = this.filteredUsers;
                this.onlineList = true;
                this.allList = false;
                this.value='';
             },
             onAll(){
-                this.users= this.$store.getters.users;
+                this.users= this.allUsers;
                 this.allList = true;
                 this.onlineList=false;
                 this.value='';
             },
 
-            async onActiveChat(user){
+            async onActiveChat(user:User){
                 await this.$store.dispatch('getConnectedUser', user);
-                await this.$store.dispatch('getMessages', JSON.parse(localStorage.getItem('currentUser')));
+                await this.$store.dispatch('getMessages', this.currentUser);
             },
 
         }
@@ -203,3 +219,11 @@
     }
 }
 </style>
+
+      function onAll() {
+        throw new Error('Function not implemented.');
+      }
+
+      function onAll() {
+        throw new Error('Function not implemented.');
+      }
