@@ -38,18 +38,15 @@ export default {
             await this.$store.dispatch('getMessages', this.currentUser)
 
             if(this.$store.getters.connectedUser.name ==='Echo bot'){
-                this.typing = `${this.$store.getters.connectedUser.name} is typing...`
                 this.bot(this.$store.getters.connectedUser);         
             }
             if(this.$store.getters.connectedUser.name ==='Reverse bot'){
                 const user = this.$store.getters.connectedUser
-                this.typing = `${user.name} is typing...`
                 this.text = this.text.split('').reverse().join('')
                 setTimeout(()=>this.bot(user),3000)              
             }
 
             if(this.$store.getters.connectedUser.name ==='Spam bot'){
-                // this.typing = `${this.$store.getters.connectedUser.name} is typing...`
                 const user = this.$store.getters.connectedUser.name
                 this.text ="Yep, I did it 😄"
                 const time = Math.floor(Math.random()*(120000-10000)+10000)
@@ -65,6 +62,7 @@ export default {
                     sender_name:sender.name,
                     date: new Date().toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' })
                 }
+                sender._id===this.$store.getters.connectedUser._id ?this.typing = `${sender.name} is typing...` : this.typing=""
                 await this.$axios.$post(`/api/messages`, botMessage)
                 await this.$store.dispatch('getMessages', this.currentUser)
                 this.typing=""      
