@@ -21,7 +21,7 @@ export default {
             this.value.length<2 && this.value[0]===" "? this.value='' :this.value
         }
     },
-    
+
     methods:{
         async onSubmit(){
             const user: string|null = localStorage.getItem('currentUser')

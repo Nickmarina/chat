@@ -63,14 +63,14 @@
         },
 
         methods:{
-            onOnline():void{
+            onOnline(){
                this.filteredUsers = this.allUsers.filter(user => user.online === true);
                this.users = this.filteredUsers;
                this.onlineList = true;
                this.allList = false;
                this.value='';
             },
-            onAll():void{
+            onAll(){
                 this.users= this.allUsers;
                 this.allList = true;
                 this.onlineList=false;

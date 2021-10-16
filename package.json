@@ -2,7 +2,6 @@
   "name": "chat",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://Nickmarina/chat",
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",

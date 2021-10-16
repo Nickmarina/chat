@@ -68,7 +68,7 @@ export const actions:  ActionTree<MainState, MainState> ={
     async getMessages({commit, state},currentUser){
         const allMessages: Message[] =  await this.$axios.$get(`/api/messages?id=${currentUser._id}&botId=bot`)
         const filteredMessages = await allMessages.filter(message =>
-                    message.sender_id === state.connectedUser._id || message.recipient_id === state.connectedUser._id 
+                message.sender_id === state.connectedUser._id || message.recipient_id === state.connectedUser._id 
         )
         commit('setMessages', filteredMessages)
     },
