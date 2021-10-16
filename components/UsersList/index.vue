@@ -23,6 +23,7 @@
 <script>
     export default{
         data: () => ({
+            allUsers:[],
             filteredUsers:[],
             users: [],
             onlineList: false,
@@ -33,7 +34,15 @@
 
        async mounted(){
             await this.$store.dispatch('getUsers');
-            this.users = await this.$store.getters.users;
+            this.allUsers = await this.$store.getters.users.filter(user =>{
+             if(localStorage.getItem('currentUser')){
+                 const currentUser= JSON.parse(localStorage.getItem('currentUser'));
+                 return user._id !== currentUser._id
+             } else{
+                 return user;
+             }
+         });
+         this.users = this.allUsers
         },
 
         watch:{
@@ -48,14 +57,14 @@
 
         methods:{
             onOnline(){
-               this.filteredUsers = this.$store.getters.users.filter(user => user.online === true);
+               this.filteredUsers = this.allUsers.filter(user => user.online === true);
                this.users = this.filteredUsers;
                this.onlineList = true;
                this.allList = false;
                this.value='';
             },
             onAll(){
-                this.users= this.$store.getters.users;
+                this.users= this.allUsers;
                 this.allList = true;
                 this.onlineList=false;
                 this.value='';
