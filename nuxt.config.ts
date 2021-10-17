@@ -2,7 +2,7 @@ import { Configuration } from '@nuxt/types';
 
 const nuxtConfig: Configuration = {
   ssr: false,
-  target: 'server',
+  target: 'static',
   head: {
     title: 'chat',
     htmlAttrs: {
