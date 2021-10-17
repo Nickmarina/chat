@@ -1,8 +1,8 @@
-export default {
-  // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
-  ssr: false,
+import { Configuration } from '@nuxt/types';
 
-  // Global page headers: https://go.nuxtjs.dev/config-head
+const nuxtConfig: Configuration = {
+  ssr: false,
+  target: 'server',
   head: {
     title: 'chat',
     htmlAttrs: {
@@ -19,28 +19,21 @@ export default {
     ]
   },
 
-  // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     
   ],
 
   loading:{color:'white'},
 
-  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
   ],
 
-  // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
-  // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
   ],
 
-
-  // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/axios',
   ],
@@ -52,9 +45,8 @@ export default {
   proxy: {
     '/api/': { target: 'https://chat-server-nestjs.herokuapp.com/', pathRewrite: {'^/api/': ''}, changeOrigin: true }
   },
-  // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }, 
+};
 
-  // target: 'static',
-}
+export default nuxtConfig;

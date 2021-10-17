@@ -5,18 +5,26 @@
   </div>
 </template>
 
-<script>
-export default ({  
-    async mounted(){
-    if(!localStorage.getItem('currentUser')){
-          const user = {name: `user ${Math.floor(Math.random() * 1000)}`};
-          const currentUser = await this.$axios.$post(`/api/users`, user);
-          localStorage.setItem('currentUser', JSON.stringify(currentUser));
-      }
-      await this.$store.dispatch('getUsers');
-      const randomUser =  this.$store.getters.users[Math.floor(Math.random() * this.$store.getters.users.length)];
-      await this.$store.dispatch('getConnectedUser', randomUser);
-      await this.$store.dispatch('getMessages',JSON.parse(localStorage.getItem('currentUser')))
+<script lang="ts">
+    import Vue from 'vue'
+    import{User} from '~/store'
+    type UserName = {
+      name: string
+    }
+
+   export default Vue.extend({
+      async mounted(){
+        const currentUser: string| null = localStorage.getItem('currentUser')
+        if(!currentUser){
+           const user: UserName = {name: `user ${Math.floor(Math.random() * 1000)}`};
+           const newUser:User = await this.$axios.$post(`/api/users`, user);
+           localStorage.setItem('currentUser', JSON.stringify(newUser));
+        }
+        await this.$store.dispatch('getUsers');
+        const randomUser:User=  this.$store.getters.users[Math.floor(Math.random() * this.$store.getters.users.length)];
+        await this.$store.dispatch('getConnectedUser', randomUser);
+        if(typeof currentUser === 'string')
+        await this.$store.dispatch('getMessages',JSON.parse(currentUser))
     }
 })
 </script>
