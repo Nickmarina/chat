@@ -7,9 +7,9 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
 import {Message,User} from '~/store'
-
-export default {
+export default Vue.extend ({
     data:()=>({
         value: '',
         text: '',
@@ -21,9 +21,8 @@ export default {
             this.value.length<2 && this.value[0]===" "? this.value='' :this.value
         }
     },
-
     methods:{
-        async onSubmit(){
+        async onSubmit(): Promise<void>{
             const user: string|null = localStorage.getItem('currentUser')
                 if(typeof user === 'string'){
                     this.currentUser= await JSON.parse(user)
@@ -37,10 +36,8 @@ export default {
                 sender_name:  this.currentUser.name,
                 date: new Date().toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' })
             }
-
             await this.$axios.$post(`/api/messages`, userMessage)
             await this.$store.dispatch('getMessages', this.currentUser)
-
             if(this.$store.getters.connectedUser.name ==='Echo bot'){
                 this.bot(this.$store.getters.connectedUser);         
             }
@@ -49,7 +46,6 @@ export default {
                 this.text = this.text.split('').reverse().join('')
                 setTimeout(()=>this.bot(user),3000)              
             }
-
             if(this.$store.getters.connectedUser.name ==='Spam bot'){
                 const user = this.$store.getters.connectedUser.name
                 this.text ="Yep, I did it 😄"
@@ -57,7 +53,6 @@ export default {
                 setInterval(()=> this.bot(user), time)
             }
         },
-
         async bot(sender:User){
              const botMessage:Message ={
                     sender_id: sender._id,
@@ -72,7 +67,7 @@ export default {
                 this.typing=""      
         }
     }
-}
+})
 </script>
 
 <style lang="scss" scoped>

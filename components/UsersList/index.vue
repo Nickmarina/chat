@@ -21,26 +21,25 @@
 </template>
 
 <script lang="ts">
-    import{User} from '~/store'
-
-    export default{
+   import Vue from 'vue'
+    import{User,state} from '~/store'
+    export default Vue.extend({
         data: () => ({
-            allUsers:[{_id:'',name:'', online:false}],
-            filteredUsers:[{_id:'', name:'', online:false}],
-            users: [{_id:'', name:'', online:false}],
+            allUsers: new Array<User>(),
+            filteredUsers: new Array<User>(),
+            users: new Array<User>(),
             onlineList: false,
             allList: true,
             activeUser: false,
             value:'',
             currentUser:{_id:''}
         }),
-
        async mounted(){
-            const currentUser: string| null = localStorage.getItem('currentUser')
             await this.$store.dispatch('getUsers');
             const notFilteredUsers:Array<User>= await this.$store.getters.users
             if(notFilteredUsers.length>0){
                 this.allUsers =notFilteredUsers.filter(user =>{
+                    const currentUser: string| null = localStorage.getItem('currentUser')
                     if(typeof currentUser === 'string'){
                         this.currentUser= JSON.parse(currentUser);
                         return user._id !== this.currentUser._id
@@ -51,39 +50,35 @@
                 this.users = this.allUsers
             }
         },
-
         watch:{
             value(){
                 if (this.value.length>0){
                     const normalizedName = this.value.toLowerCase();
                     return this.users = this.users.filter(user => user.name.toLowerCase().includes(normalizedName))
                 }
-                this.allList? this.onAll() :this.onOnline();               
+                this.allList? this.users= this.allUsers :this.users = this.filteredUsers;;               
             }
         },
-
         methods:{
-            onOnline(){
+            onOnline():void{
                this.filteredUsers = this.allUsers.filter(user => user.online === true);
                this.users = this.filteredUsers;
                this.onlineList = true;
                this.allList = false;
                this.value='';
             },
-            onAll(){
+            onAll():void{
                 this.users= this.allUsers;
                 this.allList = true;
                 this.onlineList=false;
                 this.value='';
             },
-
             async onActiveChat(user:User){
                 await this.$store.dispatch('getConnectedUser', user);
                 await this.$store.dispatch('getMessages', this.currentUser);
             },
-
         }
-    }
+    })
 </script>
 
 <style scoped lang="scss">
