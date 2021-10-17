@@ -13,20 +13,23 @@
     }
 
    export default Vue.extend({
-      async mounted(){
+     
+
+    async mounted(){
+        await this.$store.dispatch('getUsers');
         const currentUser: string| null = localStorage.getItem('currentUser')
         if(!currentUser){
            const user: UserName = {name: `user ${Math.floor(Math.random() * 1000)}`};
            const newUser:User = await this.$axios.$post(`/api/users`, user);
            localStorage.setItem('currentUser', JSON.stringify(newUser));
         }
-        await this.$store.dispatch('getUsers');
-        const randomUser:User=  this.$store.getters.users[Math.floor(Math.random() * this.$store.getters.users.length)];
-        await this.$store.dispatch('getConnectedUser', randomUser);
-        if(typeof currentUser === 'string')
-        await this.$store.dispatch('getMessages',JSON.parse(currentUser))
+        const randomUser:User= this.$store.getters.users[Math.floor(Math.random() * this.$store.getters.users.length)];
+         await this.$store.dispatch('getConnectedUser', randomUser);
+         if(typeof currentUser === 'string'){
+          await this.$store.dispatch('getMessages',JSON.parse(currentUser))
+        }
     }
-})
+  })
 </script>
 
 <style lang='scss'>

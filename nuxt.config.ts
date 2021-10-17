@@ -1,8 +1,13 @@
 import { Configuration } from '@nuxt/types';
 
 const nuxtConfig: Configuration = {
-  // ssr: false,
+  ssr:false,
   // target: 'static',
+  // generate: {
+  //   fallback: true,
+  //   subFolders: false,
+  //   route:"/",
+  // },
   head: {
     title: 'chat',
     htmlAttrs: {
