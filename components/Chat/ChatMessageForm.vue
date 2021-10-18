@@ -47,9 +47,9 @@ export default Vue.extend ({
                 setTimeout(()=>this.bot(user),3000)              
             }
             if(this.$store.getters.connectedUser.name ==='Spam bot'){
-                const user = this.$store.getters.connectedUser.name
-                this.text ="Yep, I did it 😄"
-                const time = Math.floor(Math.random()*(120000-10000)+10000)
+                const user = this.$store.getters.connectedUser
+                this.text ="😄"
+                const time = Math.floor(Math.random()*(12000-1000)+1000)
                 setInterval(()=> this.bot(user), time)
             }
         },
