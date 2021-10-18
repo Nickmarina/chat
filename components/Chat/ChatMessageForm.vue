@@ -49,7 +49,7 @@ export default Vue.extend ({
             if(this.$store.getters.connectedUser.name ==='Spam bot'){
                 const user = this.$store.getters.connectedUser
                 this.text ="😄"
-                const time = Math.floor(Math.random()*(12000-1000)+1000)
+                const time = Math.floor(Math.random()*(120000-10000)+10000)
                 setInterval(()=> this.bot(user), time)
             }
         },
